@@ -48,7 +48,7 @@ You can also turn off generating dynamic .yaml by setting below flag in [setting
 # Mark this to False if you want to skip retrieving diff and generating manifest file
 MANIFEST_ONLY = True # by default this value is True
 ```
-Check also the .parent in BASE_DIR variable in [settings.py](settings.py). For example [Project files tree](README.md:77) the below variable should have 3 .parent:
+Check also the .parent in BASE_DIR variable in [settings.py](settings.py). For example '**Project files tree**' the below variable should have 3 .parent:
 ```python
 
 # Add as many 'parent' as this file depth than main repo path
@@ -74,7 +74,7 @@ manifest:
 
 Here is an example of configuration in bitbucket pipelines. The whole catalog of CommsCloudDeployer is put inside repo project.
 
-#### Sampler poject file tree:
+#### Sample poject file tree:
 ```bash
 .
 repository_catalog
