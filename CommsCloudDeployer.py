@@ -45,9 +45,9 @@ def get_args(parser) -> dict:
 
     return result_args
 
-def skip_manifest(args):
+def skip_manifest(args, manifest_only):
     clr.print_info("Skipping generating dynamic manifest file")
-    cc_handler.write_changes_to_yaml("", args['repository'], args['catalog'], False)
+    cc_handler.write_changes_to_yaml("", args['repository'], args['catalog'], manifest_only)
 
 
 def main():
@@ -67,7 +67,7 @@ def main():
         return
 
     if not MANIFEST_ONLY:  # Skip generating dynamic manifest if MANIFEST_ONLY is set up to False
-        skip_manifest(args)
+        skip_manifest(args, False)
     clr.print_info('Retrieving last tag')
     last_tag = git_handler.get_last_tag_with_prefix(args['repository'], args['branch'], args['org'])
     if last_tag is not None:
@@ -78,7 +78,7 @@ def main():
 
         if not changes or changes[0] == '':
             clr.print_info(f"There are no changes on '{args['branch']}' branch since the last tag.")
-            skip_manifest(args)
+            skip_manifest(args, True)
         else:
             clr.print_success(f"Changes inside '{args['catalog']}' catalog on the '{args['branch']}' branch since the last tag:")
             for change in changes:
@@ -86,7 +86,7 @@ def main():
                     clr.print_info(" - " + change)
 
             clr.print_info("Generating manifest changes")
-            manifest_changes = cc_handler.get_comms_cloud_paths(changes)
+            manifest_changes = cc_handler.get_comms_cloud_paths(changes, args['catalog'])
             print(manifest_changes)
             if len(manifest_changes) > 0:
                 clr.print_info("Writing changes to yaml file")
@@ -95,7 +95,7 @@ def main():
 
     else:
         clr.print_info(f"There is no existing tag with prefix '{TAG_PREFIX}{args['branch']}'")
-        skip_manifest(args)
+        skip_manifest(args, False)
 
 
 

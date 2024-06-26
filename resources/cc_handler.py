@@ -3,13 +3,13 @@ import os
 import resources.printcolors as clr
 from settings import MANIFEST_ONLY, BASE_DIR
 
-def get_comms_cloud_paths(paths: list) -> list:
+def get_comms_cloud_paths(paths: list, comms_cloud_catalog_name: str) -> list:
     results =[]
     for path in paths:
         parts = path.split('/')
 
-        # Sprawdzenie, czy ścieżka ma więcej niż dwa foldery i nie jest plikiem w folderze CC
-        if len(parts) > 2 and parts[0] == "CC" and not parts[-1].startswith('.') and parts[2].find('.') == -1:
+        # Check line for correct comms cloud data path
+        if len(parts) > 2 and parts[0] == comms_cloud_catalog_name and not parts[-1].startswith('.') and parts[2].find('.') == -1:
             path = f"{parts[1]}/{parts[2]}"
             if path not in results:
                 results.append(path)

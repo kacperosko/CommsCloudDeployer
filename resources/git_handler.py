@@ -16,7 +16,7 @@ def get_last_tag_with_prefix(repo_path: str, branch: str, org: str) -> str:
     """
     # Go to repository catalog
     original_cwd = os.getcwd()
-    os.chdir('/Users/kacperosko/test')
+    os.chdir(BASE_DIR)
 
     try:
         # Get all merged tags
@@ -59,7 +59,7 @@ def get_changes_since_last_tag(last_tag: str, repo_path: str, comms_cloud_catalo
             result = subprocess.run(['git', 'diff', last_tag, '--name-only', '--', f'{comms_cloud_catalog_name}/'],
                                     stdout=subprocess.PIPE)
         else:
-            result = subprocess.run(['git', 'ls-files', 'CC/'], stdout=subprocess.PIPE)
+            result = subprocess.run(['git', 'ls-files', f'{comms_cloud_catalog_name}/'], stdout=subprocess.PIPE)
         return result.stdout.decode('utf-8').strip().split('\n')
     except Exception as e:
         clr.print_error(f'Error retrieving changes since last tag: {e}')
