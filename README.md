@@ -48,6 +48,12 @@ You can also turn off generating dynamic .yaml by setting below flag in [setting
 # Mark this to False if you want to skip retrieving diff and generating manifest file
 MANIFEST_ONLY = True # by default this value is True
 ```
+Check also the .parent in BASE_DIR variable in [settings.py](settings.py). For example [Project files tree](README.md:77) the below variable should have 3 .parent:
+```python
+
+# Add as many 'parent' as this file depth than main repo path
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+```
 ### Script Result
 
 That's the result of run the CommsCloudDeployer:
@@ -68,7 +74,7 @@ manifest:
 
 Here is an example of configuration in bitbucket pipelines. The whole catalog of CommsCloudDeployer is put inside repo project.
 
-Sample project file tree:
+#### Sampler poject file tree:
 ```bash
 .
 repository_catalog
@@ -83,6 +89,7 @@ repository_catalog
 │   ├── some_scripts
 │   └── CommsCloudDeployer    <--- Comms cloud deployer project catalog
 │       ├── CommsCloudDeployer.py
+│       ├── settings.py
 │       └── resources
 │
 ├── README.md
