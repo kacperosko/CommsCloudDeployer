@@ -1,0 +1,13 @@
+import os
+from pathlib import Path
+
+# Mark this to False if you want to skip retrieving diff and generating manifest file
+MANIFEST_ONLY = False
+
+# Define directory to root of the project
+BASE_DIR = Path(__file__).resolve().parent
+
+# Path to directory where temporary CSV files are saving
+TEMP_CSV_DIR = os.path.join(BASE_DIR, "bin", "temp")
+
+TAG_PREFIX = "commsCloudDeployer"

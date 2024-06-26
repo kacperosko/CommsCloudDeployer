@@ -1,0 +1,5 @@
+activate: true
+manifestOnly: false
+oauthConnection: true
+projectPath: ./CC
+separateProducts: true
