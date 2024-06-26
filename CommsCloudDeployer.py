@@ -68,7 +68,6 @@ def main():
     last_tag = git_handler.get_last_tag_with_prefix(args['branch'], args['org'])
     if last_tag is not None:
         clr.print_success(f"Latest tag was found on the '{args['branch']}' branch: {last_tag}):")
-        print(type(last_tag))
         clr.print_info('Retrieving diff changes since last tag')
         changes = git_handler.get_changes_since_last_tag(last_tag, args['catalog'])
 
@@ -87,7 +86,8 @@ def main():
             if len(manifest_changes) > 0:
                 clr.print_info("Writing changes to yaml file")
                 cc_handler.write_changes_to_yaml(manifest_changes, args['catalog'], True)
-
+            else:
+                clr.print_info("No changes to write")
 
     else:
         clr.print_info(f"There is no existing tag with prefix '{TAG_PREFIX}{args['branch']}'")
