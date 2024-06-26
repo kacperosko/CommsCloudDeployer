@@ -15,9 +15,6 @@ def add_args():
         description='Generate .yaml file with manifest files to deploy',
     )
 
-    parser.add_argument("-r", "--repository",
-                        help="Path to repository",
-                        required=True)
     parser.add_argument("-b", "--branch",
                         help="Name of the branch",
                         required=True)
@@ -37,7 +34,6 @@ def add_args():
 def get_args(parser) -> dict:
     result_args = {}
     args = parser.parse_args()
-    result_args['repository'] = args.repository
     result_args['branch'] = args.branch
     result_args['catalog'] = args.catalog
     result_args['org'] = args.org
@@ -47,7 +43,7 @@ def get_args(parser) -> dict:
 
 def skip_manifest(args, manifest_only):
     clr.print_info("Skipping generating dynamic manifest file")
-    cc_handler.write_changes_to_yaml("", args['repository'], args['catalog'], manifest_only)
+    cc_handler.write_changes_to_yaml("", args['catalog'], manifest_only)
 
 
 def main():
@@ -60,7 +56,7 @@ def main():
 
     if args['tagOnly'].capitalize() == 'Y':
         clr.print_info("Creating new tag")
-        new_tag = git_handler.add_tag_with_prefix(args['repository'], args['org'])
+        new_tag = git_handler.add_tag_with_prefix(args['org'])
         if not new_tag:
             clr.print_error("Failed to create new tag")
         clr.print_success('Script ended')
@@ -69,12 +65,12 @@ def main():
     if not MANIFEST_ONLY:  # Skip generating dynamic manifest if MANIFEST_ONLY is set up to False
         skip_manifest(args, False)
     clr.print_info('Retrieving last tag')
-    last_tag = git_handler.get_last_tag_with_prefix(args['repository'], args['branch'], args['org'])
+    last_tag = git_handler.get_last_tag_with_prefix(args['branch'], args['org'])
     if last_tag is not None:
         clr.print_success(f"Latest tag was found on the '{args['branch']}' branch: {last_tag}):")
         print(type(last_tag))
         clr.print_info('Retrieving diff changes since last tag')
-        changes = git_handler.get_changes_since_last_tag(last_tag, args['repository'], args['catalog'])
+        changes = git_handler.get_changes_since_last_tag(last_tag, args['catalog'])
 
         if not changes or changes[0] == '':
             clr.print_info(f"There are no changes on '{args['branch']}' branch since the last tag.")
@@ -90,7 +86,7 @@ def main():
             print(manifest_changes)
             if len(manifest_changes) > 0:
                 clr.print_info("Writing changes to yaml file")
-                cc_handler.write_changes_to_yaml(manifest_changes, args['repository'], args['catalog'], True)
+                cc_handler.write_changes_to_yaml(manifest_changes, args['catalog'], True)
 
 
     else:

@@ -16,7 +16,7 @@ def get_comms_cloud_paths(paths: list, comms_cloud_catalog_name: str) -> list:
 
     return list(set(results))
 
-def write_changes_to_yaml(manifest_lines: list, repo_path: str, comms_cloud_catalog_name: str, manifest_only: bool) -> bool:
+def write_changes_to_yaml(manifest_lines: list, comms_cloud_catalog_name: str, manifest_only: bool) -> bool:
     yaml_path = os.path.join(BASE_DIR, 'PyCommsCloud.yaml')
     clr.print_info(f'yaml path: {yaml_path}')
     data = {

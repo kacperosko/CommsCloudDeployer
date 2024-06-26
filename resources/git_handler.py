@@ -5,12 +5,11 @@ import resources.printcolors as clr
 from settings import TAG_PREFIX, BASE_DIR
 
 
-def get_last_tag_with_prefix(repo_path: str, branch: str, org: str) -> str:
+def get_last_tag_with_prefix(branch: str, org: str) -> str:
     """
     Gets the last tag matching the prefix and branch.
 
     :param org:
-    :param repo_path:
     :param branch:
     :return:
     """
@@ -42,12 +41,11 @@ def get_last_tag_with_prefix(repo_path: str, branch: str, org: str) -> str:
         os.chdir(original_cwd)
 
 
-def get_changes_since_last_tag(last_tag: str, repo_path: str, comms_cloud_catalog_name: str) -> list:
+def get_changes_since_last_tag(last_tag: str, comms_cloud_catalog_name: str) -> list:
     """
     Gets the changes since the last tag inside the given comms cloud catalog name.
 
     :param last_tag:
-    :param repo_path:
     :param comms_cloud_catalog_name:
     :return:
     """
@@ -68,7 +66,7 @@ def get_changes_since_last_tag(last_tag: str, repo_path: str, comms_cloud_catalo
         os.chdir(original_cwd)
 
 
-def add_tag_with_prefix(repo_path, org) -> bool:
+def add_tag_with_prefix(org) -> bool:
     success = False
 
     original_cwd = os.getcwd()
