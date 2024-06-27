@@ -25,6 +25,7 @@ def get_last_tag_with_prefix(branch: str, org: str) -> str:
             return None
 
         # Filter by tag prefix
+        clr.print_info(f"Searching tag with prefix {TAG_PREFIX}{org}")
         filtered_tags = [tag for tag in tags if tag.startswith(TAG_PREFIX + org)]
         if not filtered_tags:
             return None
@@ -44,6 +45,7 @@ def get_last_tag_with_prefix(branch: str, org: str) -> str:
 def get_changes_since_last_tag(last_tag: str, comms_cloud_catalog_name: str) -> list:
     """
     Gets the changes since the last tag inside the given comms cloud catalog name.
+    Only considers files that have been added or modified, excluding deleted files.
 
     :param last_tag:
     :param comms_cloud_catalog_name:
@@ -54,13 +56,18 @@ def get_changes_since_last_tag(last_tag: str, comms_cloud_catalog_name: str) -> 
 
     try:
         if last_tag:
-            result = subprocess.run(['git', 'diff', last_tag, '--name-only', '--', f'{comms_cloud_catalog_name}/'],
+            # Get the list of added or modified files since the last tag
+            result = subprocess.run(['git', 'diff', last_tag, '--name-status', '--', f'{comms_cloud_catalog_name}/'],
                                     stdout=subprocess.PIPE)
+            lines = result.stdout.decode('utf-8').strip().split('\n')
+            changed_files = [line.split('\t')[1] for line in lines if line.startswith(('A', 'M'))]
         else:
-            result = subprocess.run(['git', 'ls-files', f'{comms_cloud_catalog_name}/'], stdout=subprocess.PIPE)
-        return result.stdout.decode('utf-8').strip().split('\n')
+            # Get the list of all files, excluding deleted ones
+            result = subprocess.run(['git', 'ls-files', '--', f'{comms_cloud_catalog_name}/'], stdout=subprocess.PIPE)
+            changed_files = result.stdout.decode('utf-8').strip().split('\n')
+
+        return changed_files
     except Exception as e:
-        clr.print_error(f'Error retrieving changes since last tag: {e}')
         return None
     finally:
         os.chdir(original_cwd)
